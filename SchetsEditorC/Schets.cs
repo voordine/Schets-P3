@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 public class Schets
 {
@@ -35,6 +36,11 @@ public class Schets
     {
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+    }
+
+    public void SaveBitmap()
+    {
+        bitmap.Save("C:\\Users\\nadin\\OneDrive\\Desktop\\trst.png"); // argumenten
     }
     public void Roteer()
     {

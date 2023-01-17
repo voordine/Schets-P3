@@ -33,6 +33,11 @@ public class SchetsWin : Form
         this.Close();
     }
 
+    private void opslaan(object o, EventArgs ea)
+    {
+        this.schetscontrol.Schets.SaveBitmap();
+    }
+
     public SchetsWin()
     {
         ISchetsTool[] deTools = { new PenTool()         
@@ -86,6 +91,7 @@ public class SchetsWin : Form
         ToolStripMenuItem menu = new ToolStripMenuItem("File");
         menu.MergeAction = MergeAction.MatchOnly;
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
+        menu.DropDownItems.Add("Opslaan &als...", null, this.opslaan);
         menuStrip.Items.Add(menu);
     }
 
