@@ -38,9 +38,9 @@ public class Schets
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
     }
 
-    public void SaveBitmap()
+    public void SlaOp()
     {
-        bitmap.Save("C:\\Users\\nadin\\OneDrive\\Desktop\\trst.png"); // argumenten
+        bitmap.Save("C:\\Users\\Public\\Pictures\\kunst.bmp"); // argumenten
     }
     public void Roteer()
     {

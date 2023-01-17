@@ -35,7 +35,7 @@ public class SchetsWin : Form
 
     private void opslaan(object o, EventArgs ea)
     {
-        this.schetscontrol.Schets.SaveBitmap();
+        this.schetscontrol.Schets.SlaOp();
     }
 
     public SchetsWin()
