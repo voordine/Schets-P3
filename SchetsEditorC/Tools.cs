@@ -103,7 +103,7 @@ public class RechthoekTool : TweepuntTool
         g.DrawRectangle(MaakPen(kwast,3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }
-public class CirkelTool : TweepuntTool
+public class RingTool : TweepuntTool
 {
     public override string ToString() { return "ring"; }
 
@@ -114,7 +114,7 @@ public class CirkelTool : TweepuntTool
 
 }
 
-public class VolCirkelTool : TweepuntTool
+public class CirkelTool : TweepuntTool
 {
     public override string ToString() { return "cirkel"; }
 

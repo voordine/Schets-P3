@@ -53,4 +53,9 @@ public class SchetsControl : UserControl
     {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
     }
+
+    public void Undo(object sender, EventArgs ea)
+    {
+
+    }
 }

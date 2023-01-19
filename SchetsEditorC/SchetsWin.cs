@@ -10,6 +10,7 @@ public class SchetsWin : Form
     ISchetsTool huidigeTool;
     Panel paneel;
     bool vast;
+    bool gewijzigd = false;
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -46,8 +47,8 @@ public class SchetsWin : Form
                                 , new VolRechthoekTool()
                                 , new TekstTool()
                                 , new GumTool()
+                                , new RingTool()
                                 , new CirkelTool()
-                                , new VolCirkelTool()
                                 };
         String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };
 
@@ -161,8 +162,15 @@ public class SchetsWin : Form
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
         penkleur.Location = new Point(180, 3); 
-        penkleur.AutoSize = true;               
-            
+        penkleur.AutoSize = true;
+
+        Button undo = new Button(); paneel.Controls.Add(undo);
+        undo.Text = "Undo";
+        undo.Name = "UndoButton";
+        undo.Enabled = false;
+        undo.Location = new Point(380, 0);
+        undo.Click += schetscontrol.Undo;
+
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(240, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
