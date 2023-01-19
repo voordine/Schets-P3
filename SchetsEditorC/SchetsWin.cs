@@ -37,6 +37,7 @@ public class SchetsWin : Form
     private void opslaan(object o, EventArgs ea)
     {
         this.schetscontrol.Schets.SlaOp();
+        gewijzigd = false;
     }
 
     public SchetsWin()
@@ -68,12 +69,16 @@ public class SchetsWin : Form
         schetscontrol.MouseUp   += (object o, MouseEventArgs mea) =>
                                     {   if (vast)
                                         huidigeTool.MuisLos (schetscontrol, mea.Location);
-                                        vast = false; 
+                                        vast = false;
+                                        gewijzigd = true;
                                     };
         schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
-                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar); 
+                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar);
+                                        gewijzigd = true;
                                     };
         this.Controls.Add(schetscontrol);
+
+        this.Closing += VensterSluiten;
 
         menuStrip = new MenuStrip();
         menuStrip.Visible = false;
@@ -85,6 +90,21 @@ public class SchetsWin : Form
         this.maakActieButtons(deKleuren);
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
+    }
+
+    private void VensterSluiten(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (gewijzigd == true)
+        {
+            if (MessageBox.Show(
+                                    "Er zijn wijzingen gedaan sinds de laatste keer dat er opgeslagen is.\n" +
+                                    "Weet je zeker dat je je kunstwerk wilt verlaten?", "Pas op!", MessageBoxButtons.OKCancel)
+                                    == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
+        }
+
     }
 
     private void maakFileMenu()
