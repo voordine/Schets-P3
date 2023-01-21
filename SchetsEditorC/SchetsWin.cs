@@ -45,7 +45,7 @@ public class SchetsWin : Form
                                 , new RingTool()
                                 , new CirkelTool()
                                 };
-        String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "White", "Orange", "Purple", "Pink"};
+        String[] deKleuren = { "Black", "White", "Gray", "Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Purple", "Magenta", "Pink"};
 
         this.ClientSize = new Size(700, 510);
         huidigeTool = deTools[0];

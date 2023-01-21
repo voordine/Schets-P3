@@ -48,6 +48,11 @@ public class TekstTool : StartpuntTool
             startpunt.X += (int)sz.Width;
             s.Invalidate();
         }
+        //Spaties kunnen toevoegen aan je tekst
+        if (c.ToString() == " ")
+        {
+            startpunt.X += 20;
+        }
     }
 }
 
