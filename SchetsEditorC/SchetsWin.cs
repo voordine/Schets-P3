@@ -34,12 +34,6 @@ public class SchetsWin : Form
         this.Close();
     }
 
-    private void opslaan(object o, EventArgs ea)
-    {
-        this.schetscontrol.Schets.SlaOp();
-        gewijzigd = false;
-    }
-
     public SchetsWin()
     {
         ISchetsTool[] deTools = { new PenTool()         
@@ -107,12 +101,27 @@ public class SchetsWin : Form
 
     }
 
+    public void SlaOp(object o, EventArgs ea)
+{
+    SaveFileDialog filetypen = new SaveFileDialog();
+    filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
+    filetypen.Title = "Kunstwerk opslaan als...";
+    if (filetypen.ShowDialog() == DialogResult.OK) 
+    {
+        Bitmap opgeslagenbitmap;
+        opgeslagenbitmap = Schets.bitmap;
+        opgeslagenbitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+        gewijzigd = false;
+
+    }
+}
+
     private void maakFileMenu()
     {   
         ToolStripMenuItem menu = new ToolStripMenuItem("File");
         menu.MergeAction = MergeAction.MatchOnly;
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
-        menu.DropDownItems.Add("Opslaan &als...", null, this.opslaan);
+        menu.DropDownItems.Add("Opslaan &als...", null, this.SlaOp);
         menuStrip.Items.Add(menu);
     }
 

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 public class Schets
 {
-    private Bitmap bitmap;
+    public static Bitmap bitmap;
         
     public Schets()
     {
@@ -38,10 +38,6 @@ public class Schets
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
     }
 
-    public void SlaOp()
-    {
-        bitmap.Save("C:\\Users\\Public\\Pictures\\kunst.bmp"); // argumenten
-    }
     public void Roteer()
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
