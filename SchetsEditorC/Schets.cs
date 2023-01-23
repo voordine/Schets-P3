@@ -6,7 +6,8 @@ using System.Windows.Forms;
 public class Schets
 {
     public static Bitmap bitmap;
-        
+    public List<ToolTypes> drawnshapes = new List<ToolTypes>();
+
     public Schets()
     {
         bitmap = new Bitmap(1, 1);

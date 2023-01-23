@@ -86,7 +86,7 @@ public class SchetsWin : Form
         this.veranderAfmeting(null, null);
     }
 
-    private void VensterSluiten(object sender, System.ComponentModel.CancelEventArgs e)
+    public void VensterSluiten(object sender, System.ComponentModel.CancelEventArgs e)
     {
         if (gewijzigd == true)
         {

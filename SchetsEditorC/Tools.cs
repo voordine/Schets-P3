@@ -171,3 +171,24 @@ public class GumTool : PenTool
     }
 }
 
+public enum ToolTypes
+{
+    FilledEllipse,
+    EmptyEllipse,
+    FilledRectangle,
+    EmptyRectangle,
+    Text,
+    Line,
+}
+
+public class SchetsElement
+{
+    public ToolTypes type { get; set; }
+    public Point beginPunt { get; set; }
+    public Point eindPunt { get; set; }
+    public Color kleur { get; set; }
+    public string? text { get; set; }
+
+
+
+}
