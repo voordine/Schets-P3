@@ -7,6 +7,7 @@ public class Schets
 {
     public Bitmap bitmap;
     public List<ToolTypes> ObjectenLijst = new List<ToolTypes>();
+    public bool gewijzigd { get; set; }
 
     public Schets()
     {

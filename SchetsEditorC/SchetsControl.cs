@@ -38,6 +38,7 @@ public class SchetsControl : UserControl
     }
     public void Schoon(object o, EventArgs ea)
     {   schets.Schoon();
+        schets.gewijzigd = false;
         this.Invalidate();
     }
     public void Roteer(object o, EventArgs ea)

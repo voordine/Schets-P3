@@ -4,13 +4,12 @@ using System.Drawing;
 using System.Windows.Forms;
 
 public class SchetsWin : Form
-{   
+{
     MenuStrip menuStrip;
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
     Panel paneel;
     bool vast;
-    public bool gewijzigd = false;
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -53,7 +52,8 @@ public class SchetsWin : Form
         schetscontrol = new SchetsControl();
         schetscontrol.Location = new Point(64, 10);
         schetscontrol.MouseDown += (object o, MouseEventArgs mea) =>
-                                    {   vast=true;  
+                                    {   vast=true;
+                                        this.schetscontrol.Schets.gewijzigd = true;
                                         huidigeTool.MuisVast(schetscontrol, mea.Location); 
                                     };
         schetscontrol.MouseMove += (object o, MouseEventArgs mea) =>
@@ -64,11 +64,9 @@ public class SchetsWin : Form
                                     {   if (vast)
                                         huidigeTool.MuisLos (schetscontrol, mea.Location);
                                         vast = false;
-                                        gewijzigd = true;
                                     };
         schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
                                     {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar);
-                                        gewijzigd = true;
                                     };
         this.Controls.Add(schetscontrol);
 
@@ -88,7 +86,7 @@ public class SchetsWin : Form
 
     public void VensterSluiten(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        if (gewijzigd == true)
+        if (this.schetscontrol.Schets.gewijzigd == true)
         {
             if (MessageBox.Show(
                                     "Er zijn wijzingen gedaan sinds de laatste keer dat er opgeslagen is.\n" +
@@ -109,7 +107,7 @@ public class SchetsWin : Form
         if (filetypen.ShowDialog() == DialogResult.OK)
         {
             this.schetscontrol.Schets.bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-            gewijzigd = false;
+            this.schetscontrol.Schets.gewijzigd = false;
         }
     }
 
