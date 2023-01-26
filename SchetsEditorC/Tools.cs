@@ -181,7 +181,7 @@ public enum ToolTypes
     Line,
 }
 
-public class SchetsElement
+public class SchetsObject
 {
     public ToolTypes type { get; set; }
     public Point beginPunt { get; set; }
@@ -189,6 +189,13 @@ public class SchetsElement
     public Color kleur { get; set; }
     public string? text { get; set; }
 
-
+    public SchetsObject(ToolTypes type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
+    {
+        this.type = type;
+        this.beginPunt = beginPunt;
+        this.eindPunt = eindPunt;
+        this.kleur = kleur;
+        this.text = text;
+    }
 
 }

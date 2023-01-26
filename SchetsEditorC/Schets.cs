@@ -5,8 +5,8 @@ using System.Windows.Forms;
 
 public class Schets
 {
-    public static Bitmap bitmap;
-    public List<ToolTypes> drawnshapes = new List<ToolTypes>();
+    public Bitmap bitmap;
+    public List<ToolTypes> ObjectenLijst = new List<ToolTypes>();
 
     public Schets()
     {
@@ -44,4 +44,19 @@ public class Schets
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
 
+    public void SlaOp(object o, EventArgs ea)
+    {
+        SaveFileDialog filetypen = new SaveFileDialog();
+        filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
+        filetypen.Title = "Kunstwerk opslaan als...";
+        if (filetypen.ShowDialog() == DialogResult.OK)
+        {
+            /*Bitmap opgeslagenbitmap;
+            opgeslagenbitmap = Schets.bitmap;
+            opgeslagen*/
+            bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            gewijzigd = false;
+
+        }
+    }
 }

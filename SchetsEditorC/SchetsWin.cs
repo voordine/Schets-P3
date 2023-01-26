@@ -10,7 +10,7 @@ public class SchetsWin : Form
     ISchetsTool huidigeTool;
     Panel paneel;
     bool vast;
-    bool gewijzigd = false;
+    public bool gewijzigd = false;
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -108,9 +108,9 @@ public class SchetsWin : Form
     filetypen.Title = "Kunstwerk opslaan als...";
     if (filetypen.ShowDialog() == DialogResult.OK) 
     {
-        Bitmap opgeslagenbitmap;
+        /*Bitmap opgeslagenbitmap;
         opgeslagenbitmap = Schets.bitmap;
-        opgeslagenbitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+        opgeslagen*/bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
         gewijzigd = false;
 
     }
