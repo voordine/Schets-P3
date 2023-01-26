@@ -20,7 +20,7 @@ public class Schets
     {
         if (sz.Width > bitmap.Size.Width || sz.Height > bitmap.Size.Height)
         {
-            Bitmap nieuw = new Bitmap( Math.Max(sz.Width,  bitmap.Size.Width)
+            Bitmap nieuw = new Bitmap(Math.Max(sz.Width, bitmap.Size.Width)
                                      , Math.Max(sz.Height, bitmap.Size.Height)
                                      );
             Graphics gr = Graphics.FromImage(nieuw);
@@ -44,19 +44,4 @@ public class Schets
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
 
-    public void SlaOp(object o, EventArgs ea)
-    {
-        SaveFileDialog filetypen = new SaveFileDialog();
-        filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
-        filetypen.Title = "Kunstwerk opslaan als...";
-        if (filetypen.ShowDialog() == DialogResult.OK)
-        {
-            /*Bitmap opgeslagenbitmap;
-            opgeslagenbitmap = Schets.bitmap;
-            opgeslagen*/
-            bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-            gewijzigd = false;
-
-        }
-    }
 }

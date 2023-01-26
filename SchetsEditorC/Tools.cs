@@ -184,18 +184,21 @@ public enum ToolTypes
 public class SchetsObject
 {
     public ToolTypes type { get; set; }
-    public Point beginPunt { get; set; }
-    public Point eindPunt { get; set; }
     public Color kleur { get; set; }
     public string? text { get; set; }
+    public Point beginPunt { get; set; }
+    public Point eindPunt { get; set; }
 
-    public SchetsObject(ToolTypes type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
+
+    public SchetsObject(Point beginPunt, Point eindPunt, ToolTypes type, Color kleur, string? text = null)
     {
-        this.type = type;
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
+        this.type = type;
         this.kleur = kleur;
         this.text = text;
+        //this.bounds = TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt);
     }
+
 
 }

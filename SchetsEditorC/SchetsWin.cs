@@ -102,19 +102,16 @@ public class SchetsWin : Form
     }
 
     public void SlaOp(object o, EventArgs ea)
-{
-    SaveFileDialog filetypen = new SaveFileDialog();
-    filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
-    filetypen.Title = "Kunstwerk opslaan als...";
-    if (filetypen.ShowDialog() == DialogResult.OK) 
     {
-        /*Bitmap opgeslagenbitmap;
-        opgeslagenbitmap = Schets.bitmap;
-        opgeslagen*/bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-        gewijzigd = false;
-
+        SaveFileDialog filetypen = new SaveFileDialog();
+        filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
+        filetypen.Title = "Kunstwerk opslaan als...";
+        if (filetypen.ShowDialog() == DialogResult.OK)
+        {
+            this.schetscontrol.Schets.bitmap.Save(filetypen.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            gewijzigd = false;
+        }
     }
-}
 
     private void maakFileMenu()
     {   
