@@ -82,6 +82,7 @@ public class SchetsWin : Form
         this.maakActieButtons(deKleuren);
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
+
     }
 
     public void VensterSluiten(object sender, System.ComponentModel.CancelEventArgs e)
@@ -188,12 +189,12 @@ public class SchetsWin : Form
         penkleur.Location = new Point(180, 3); 
         penkleur.AutoSize = true;
 
-        Button undo = new Button(); paneel.Controls.Add(undo);
+        /*Button undo = new Button(); paneel.Controls.Add(undo);
         undo.Text = "Undo";
         undo.Name = "UndoButton";
         undo.Enabled = false;
         undo.Location = new Point(380, 0);
-        undo.Click += schetscontrol.Undo;
+        undo.Click += schetscontrol.Undo;*/
 
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(240, 0); 
@@ -202,5 +203,25 @@ public class SchetsWin : Form
         foreach (string k in kleuren)
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
+
+
+        //schuifregelaar voor de lijndikte
+        TrackBar tb = new TrackBar(); paneel.Controls.Add(tb);
+        Label tbtekst = new Label(); paneel.Controls.Add(tbtekst);
+        tbtekst.Location = new Point(400, 3);
+        tbtekst.AutoSize = true;
+        tbtekst.Text = "Lijndikte:";
+        tb.Location = new Point(450, 0);
+        tb.AutoSize = true;
+        tb.Minimum = 0;
+        tb.Maximum = 8;
+        tb.Orientation = Orientation.Horizontal;
+        tb.ValueChanged += schetscontrol.VeranderSchuif;
+        tb.MouseUp += schetscontrol.VeranderSchuif;
+
+
     }
+
+
+
 }

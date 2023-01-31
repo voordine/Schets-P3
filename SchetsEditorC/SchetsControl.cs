@@ -7,6 +7,7 @@ public class SchetsControl : UserControl
 {   
     private Schets schets;
     private Color penkleur;
+    public int lijndikte;
 
     public Color PenKleur
     { get { return penkleur; }
@@ -14,6 +15,7 @@ public class SchetsControl : UserControl
     public Schets Schets
     { get { return schets;   }
     }
+
     public SchetsControl()
     {   this.BorderStyle = BorderStyle.Fixed3D;
         this.schets = new Schets();
@@ -53,6 +55,17 @@ public class SchetsControl : UserControl
     public void VeranderKleurViaMenu(object obj, EventArgs ea)
     {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
+    }
+
+    public void VeranderLijndikte()
+    {
+        //int lijndikte = tb.Value;
+    }
+
+    public void VeranderSchuif(object o, EventArgs ea)
+    {
+        VeranderLijndikte();
+        this.Invalidate();
     }
 
     public void Undo(object sender, EventArgs ea)

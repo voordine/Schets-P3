@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 
 public class Schets
 {
     public Bitmap bitmap;
-    public List<ToolTypes> ObjectenLijst = new List<ToolTypes>();
+    public List<SchetsObject> ObjectenLijst = new List<SchetsObject>();
     public bool gewijzigd { get; set; }
 
     public Schets()
@@ -32,8 +33,30 @@ public class Schets
     }
     public void Teken(Graphics gr)
     {
+        //foreach (SchetsObject schetsobj in ObjectenLijst)
+            //schetsobj.Draw(this.BitmapGraphics);
+        
         gr.DrawImage(bitmap, 0, 0);
     }
+
+    public void toevoegen(SchetsObject schetsobj)
+    {
+        ObjectenLijst.Add(schetsobj);
+    }
+    public void weghalen(SchetsControl s, Point p)
+    {
+        for(int n = ObjectenLijst.Count - 1; n > -1; n--)
+        {
+            SchetsObject so = ObjectenLijst[n];
+
+            /*if (so.RemoveElements(s, p, so))
+                break;*/
+        }
+
+    }
+
+    
+
     public void Schoon()
     {
         Graphics gr = Graphics.FromImage(bitmap);
