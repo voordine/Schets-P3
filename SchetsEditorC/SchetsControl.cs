@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 public class SchetsControl : UserControl
 {   
-    private Schets schets;
+    public Schets schets;
     private Color penkleur;
     public int lijndikte;
 
@@ -59,7 +59,7 @@ public class SchetsControl : UserControl
 
     public void VeranderLijndikte()
     {
-        //int lijndikte = tb.Value;
+        //int lijndikte = tblijndikte.Value;
     }
 
     public void VeranderSchuif(object o, EventArgs ea)
@@ -70,6 +70,9 @@ public class SchetsControl : UserControl
 
     public void Undo(object sender, EventArgs ea)
     {
+        if(Schets.ObjectenLijst.Count != 0)
+        {
 
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Net;
+using System.Windows.Forms;
 
 public interface ISchetsTool
 {
@@ -28,6 +29,12 @@ public abstract class StartpuntTool : ISchetsTool
     }
     public abstract void MuisDrag(SchetsControl s, Point p);
     public abstract void Letter(SchetsControl s, char c);
+
+    public virtual void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+
+    }
+
 }
 
 public class TekstTool : StartpuntTool
@@ -58,6 +65,12 @@ public class TekstTool : StartpuntTool
             startpunt.X += 20;
         }
     }
+
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+    
 }
 
 public abstract class TweepuntTool : StartpuntTool
@@ -89,14 +102,14 @@ public abstract class TweepuntTool : StartpuntTool
     public override void MuisLos(SchetsControl s, Point p)
     {   
         base.MuisLos(s, p);
-        this.Compleet(s.MaakBitmapGraphics(), this.startpunt, p);
+        this.Compleet(s.MaakBitmapGraphics(), this.startpunt, p, s);
         s.Invalidate();
     }
     public override void Letter(SchetsControl s, char c)
     {
     }
     public abstract void Bezig(Graphics g, Point p1, Point p2);
-    public virtual void Compleet(Graphics g, Point p1, Point p2)
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
         this.Bezig(g, p1, p2);
     }
@@ -111,6 +124,11 @@ public class RechthoekTool : TweepuntTool
         g.DrawRectangle(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+
 }
 public class RingTool : TweepuntTool
 {
@@ -121,9 +139,14 @@ public class RingTool : TweepuntTool
         g.DrawEllipse(MaakPen(kwast, 3), RechthoekTool.Punten2Rechthoek(p1, p2));
     }
 
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+
 }
 
-public class CirkelTool : TweepuntTool
+public class CirkelTool : RingTool
 {
     public override string ToString() { return "cirkel"; }
 
@@ -132,22 +155,22 @@ public class CirkelTool : TweepuntTool
         g.FillEllipse(kwast, RechthoekTool.Punten2Rechthoek(p1, p2));
     }
 
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+
 }
 
 public class VolRechthoekTool : RechthoekTool
 {
     public override string ToString() { return "vlak"; }
 
-    public override void Compleet(Graphics g, Point p1, Point p2)
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        g.FillRectangle(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
     }
 
-    /*public override void PakElement(Graphics g, Point p1, Point p2)
-    {   
-        GraphicsPath graphics = new GraphicsPath();
-        graphics.AddRectangle(Punten2Rechthoek(p1, p2));
-    }*/
 }
 
 public class LijnTool : TweepuntTool
@@ -158,6 +181,12 @@ public class LijnTool : TweepuntTool
     {   
         g.DrawLine(MaakPen(this.kwast,3), p1, p2);
     }
+
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+
 }
 
 public class PenTool : LijnTool
@@ -169,50 +198,58 @@ public class PenTool : LijnTool
         this.MuisLos(s, p);
         this.MuisVast(s, p);
     }
+
+    public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
+    {
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+    }
+
 }
     
-public class GumTool : PenTool
+public class GumTool : ISchetsTool
 {
     public override string ToString() { return "gum"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
-    {   
-    }
-
-    /*public void MuisDrag(SchetsControl s, Point p)
+    public void MuisDrag(SchetsControl s, Point p)
     {
+        this.MuisLos(s, p);
     }
 
     public void MuisLos(SchetsControl s, Point p)
     {
+        foreach (SchetsObject schetsobj in s.Schets.ObjectenLijst)
+        {
+            if (schetsobj.raak(p))
+            {
+                s.Schets.ObjectenLijst.Remove(schetsobj);
+                s.Invalidate();
+                s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
+                break;
+            }
+        }
     }
 
-    public void MuisVast(SchetsControl s, Point p)
-    {
-    }
+    public void MuisVast(SchetsControl s, Point p) { }
 
-    public override void Letter(SchetsControl s, char c)
-    {
-    }*/
+    public void Letter(SchetsControl s, char c) { }
+
 }
 
 public class SchetsObject
 {
-    public Point startpunt { get; set;}
+    public Point beginpunt { get; set;}
     public Point eindpunt { get; set;}
     public string tekst { get; set;}
     public Color kleur { get; set;}
     public string tool { get; set;}
-    public Brush kwast { get; set;}
 
-    public SchetsObject(Color kleur, string t, Point p, Point q, SolidBrush kwast, string text = null)
+    public SchetsObject(Color kleur, string t, Point p, Point q, string text = null)
     {
         this.kleur = kleur;
         this.tool = t;
         this.tekst = text;
-        this.startpunt = p;
+        this.beginpunt = p;
         this.eindpunt = q;
-        this.kwast = kwast;
     }
 
     public void TekenObject(Graphics g)
@@ -225,39 +262,109 @@ public class SchetsObject
             return pen;
         }
 
+        SolidBrush kwast = new SolidBrush(kleur);
+
         switch (tool)
         {
             case "tekst":
                 Font font = new Font("Tahoma", 40);
                 SizeF sz =
-                g.MeasureString(tekst, font, this.startpunt, StringFormat.GenericTypographic);
-                g.DrawString(tekst, font, kwast, this.startpunt, StringFormat.GenericTypographic); 
+                g.MeasureString(tekst, font, this.beginpunt, StringFormat.GenericTypographic);
+                g.DrawString(tekst, font, kwast, this.beginpunt, StringFormat.GenericTypographic); 
                 break;
 
             case "kader":
-                g.DrawRectangle(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(startpunt, eindpunt));
+                g.DrawRectangle(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "vlak":
-                g.FillRectangle(kwast, TweepuntTool.Punten2Rechthoek(startpunt, eindpunt));
+                g.FillRectangle(kwast, TweepuntTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "ring":
-                g.DrawEllipse(MaakPen(kwast, 3), RechthoekTool.Punten2Rechthoek(startpunt, eindpunt));
+                g.DrawEllipse(MaakPen(kwast, 3), RechthoekTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "cirkel":
-                g.FillEllipse(kwast, RechthoekTool.Punten2Rechthoek(startpunt, eindpunt));
+                g.FillEllipse(kwast, RechthoekTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "lijn":
-                g.DrawLine(MaakPen(this.kwast, 3), startpunt, eindpunt);
+                g.DrawLine(MaakPen(kwast, 3), beginpunt, eindpunt);
                 break;
 
             case "pen":
-
+                g.DrawLine(MaakPen(kwast, 3), beginpunt, eindpunt);
                 break;
+
         }
+
     }
 
+    public bool raak(Point p)
+    {
+        int bovengrens = Math.Min(beginpunt.Y, eindpunt.Y);
+        int ondergrens = Math.Max(beginpunt.Y, eindpunt.Y);
+        int lgrens = Math.Min(beginpunt.X, eindpunt.X);
+        int rgrens = Math.Max(beginpunt.X, eindpunt.X);
+
+        switch (this.tool)
+        {
+            //We hebben 4 als marge gekozen 
+
+            case "tekst":
+                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
+                    return true; 
+                break;
+
+            case "kader":
+                if (
+                    (p.X >= lgrens -4 && p.X <= lgrens +4 && p.Y >= bovengrens -4 && p.Y <= ondergrens + 4) ||
+                    (p.X >= rgrens -4 && p.X <= rgrens +4 && p.Y >= bovengrens -4 && p.Y <= ondergrens + 4) ||
+                    (p.X >= lgrens -4 && p.X <= rgrens +4 && p.Y >= bovengrens -4 && p.Y <= bovengrens + 4) ||
+                    (p.X >= lgrens -4 && p.X <= rgrens +4 && p.Y >= ondergrens -4 && p.Y <= ondergrens + 4)
+                )
+                    return true;
+                break;
+
+            case "vlak":
+                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
+                    return true;
+                break;
+
+            case "ring":
+                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
+                    return true;
+                break;
+
+            case "cirkel":
+                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
+                    return true;
+                break;
+
+            case "lijn":
+            case "pen":
+                int margeafstand = 3 + 4;
+                float px = eindpunt.X - beginpunt.X;
+                float py = eindpunt.Y - beginpunt.Y;
+                float u = ((p.X - beginpunt.X) * px + (p.Y - beginpunt.Y) * py) / ((px * px) + (py * py));
+
+                if (u > 1)
+                    u = 1;
+                else if (u < 0)
+                    u = 0;
+
+                float x = beginpunt.X + u * px;
+                float y = beginpunt.Y + u * py;
+                float dx = x - p.X;
+                float dy = y - p.Y;
+
+                double afstand = Math.Sqrt(dx * dx + dy * dy);
+
+                return afstand <= margeafstand;
+
+        }
+
+        return false;
+    }
 }

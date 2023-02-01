@@ -204,7 +204,6 @@ public class SchetsWin : Form
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
 
-
         //schuifregelaar voor de lijndikte
         TrackBar tb = new TrackBar(); paneel.Controls.Add(tb);
         Label tbtekst = new Label(); paneel.Controls.Add(tbtekst);
@@ -216,12 +215,10 @@ public class SchetsWin : Form
         tb.Minimum = 0;
         tb.Maximum = 8;
         tb.Orientation = Orientation.Horizontal;
+        tb.Name = "tblijndikte";
         tb.ValueChanged += schetscontrol.VeranderSchuif;
         tb.MouseUp += schetscontrol.VeranderSchuif;
 
-
     }
-
-
 
 }

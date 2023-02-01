@@ -33,8 +33,8 @@ public class Schets
     }
     public void Teken(Graphics gr)
     {
-        //foreach (SchetsObject schetsobj in ObjectenLijst)
-            //schetsobj.Draw(this.BitmapGraphics);
+        foreach (SchetsObject schetsobj in ObjectenLijst)
+            schetsobj.TekenObject(this.BitmapGraphics);
         
         gr.DrawImage(bitmap, 0, 0);
     }
@@ -43,24 +43,13 @@ public class Schets
     {
         ObjectenLijst.Add(schetsobj);
     }
-    public void weghalen(SchetsControl s, Point p)
-    {
-        for(int n = ObjectenLijst.Count - 1; n > -1; n--)
-        {
-            SchetsObject so = ObjectenLijst[n];
-
-            /*if (so.RemoveElements(s, p, so))
-                break;*/
-        }
-
-    }
-
-    
 
     public void Schoon()
     {
+        ObjectenLijst.Clear();
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+
     }
 
     public void Roteer()
