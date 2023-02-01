@@ -112,6 +112,26 @@ public class SchetsWin : Form
         }
     }
 
+    /*public void opslaan(object o, EventArgs ea)
+    {
+        StreamWriter w = new StreamWriter(filenaam);
+        foreach (SchetsObject schetsobj in ObjectenLijst)
+            w.WriteLine(schetsobj.ToString);
+        w.Close();
+
+    }*/
+
+    /*public void inlezen(object o, EventArgs ea)
+    {
+        ObjectenLijst.Clear();
+        StreamReader r = new StreamReader(filenaam);
+        string regel;
+        while (regel= r.ReadLine()) != null)
+            SchetsObject.Add(new SchetsObject(regel));
+        r.Close();
+        this.Invalidate();
+    }*/
+
     private void maakFileMenu()
     {   
         ToolStripMenuItem menu = new ToolStripMenuItem("File");

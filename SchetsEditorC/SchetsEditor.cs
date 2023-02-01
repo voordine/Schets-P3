@@ -33,7 +33,7 @@ public class SchetsEditor : Form
     }
     private void about(object o, EventArgs ea)
     {   
-        MessageBox.Show ( "Schets versie 3.0 (holy moly)\n(c) UU KI 2022"
+        MessageBox.Show ( "Schets versie 3.0 (holy moly)\n(c) UU KI 2023"
                         , "Over \"Schets\""
                         , MessageBoxButtons.OK
                         , MessageBoxIcon.Information

@@ -30,10 +30,7 @@ public abstract class StartpuntTool : ISchetsTool
     public abstract void MuisDrag(SchetsControl s, Point p);
     public abstract void Letter(SchetsControl s, char c);
 
-    public virtual void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
-    {
-
-    }
+    public virtual void Compleet(Graphics g, Point p1, Point p2, SchetsControl s) {}
 
 }
 
@@ -56,7 +53,6 @@ public class TekstTool : StartpuntTool
                                             this.startpunt, StringFormat.GenericTypographic);
             
             startpunt.X += (int)sz.Width;
-            //s.Schets.ObjectenLijst.AddLast(new SchetsObject());
             s.Invalidate();
         }
         //Spaties kunnen toevoegen aan je tekst
@@ -105,9 +101,7 @@ public abstract class TweepuntTool : StartpuntTool
         this.Compleet(s.MaakBitmapGraphics(), this.startpunt, p, s);
         s.Invalidate();
     }
-    public override void Letter(SchetsControl s, char c)
-    {
-    }
+    public override void Letter(SchetsControl s, char c) {}
     public abstract void Bezig(Graphics g, Point p1, Point p2);
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
@@ -360,7 +354,6 @@ public class SchetsObject
                 float dy = y - p.Y;
 
                 double afstand = Math.Sqrt(dx * dx + dy * dy);
-
                 return afstand <= margeafstand;
 
         }
