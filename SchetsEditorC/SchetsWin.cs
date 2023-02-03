@@ -44,9 +44,10 @@ public class SchetsWin : Form
                                 , new RingTool()
                                 , new CirkelTool()
                                 };
+        //een aantal nieuwe kleuren, waaronder wit zodat de oude gum terug is
         String[] deKleuren = { "Black", "White", "Gray", "Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Purple", "Magenta", "Pink"};
 
-        this.ClientSize = new Size(700, 510);
+        this.ClientSize = new Size(760, 510);
         huidigeTool = deTools[0];
 
         schetscontrol = new SchetsControl();
@@ -103,6 +104,7 @@ public class SchetsWin : Form
     public void SlaOp(object o, EventArgs ea)
     {
         SaveFileDialog filetypen = new SaveFileDialog();
+        //gebruiker kan kiezen uit meerdere filetypen
         filetypen.Filter = "JPEG-files|*.jpg|PNG-files|*.png|BMP-files|*.bmp|Alle files|*.*";
         filetypen.Title = "Kunstwerk opslaan als...";
         if (filetypen.ShowDialog() == DialogResult.OK)
@@ -112,25 +114,6 @@ public class SchetsWin : Form
         }
     }
 
-    /*public void opslaan(object o, EventArgs ea)
-    {
-        StreamWriter w = new StreamWriter(filenaam);
-        foreach (SchetsObject schetsobj in ObjectenLijst)
-            w.WriteLine(schetsobj.ToString);
-        w.Close();
-
-    }*/
-
-    /*public void inlezen(object o, EventArgs ea)
-    {
-        ObjectenLijst.Clear();
-        StreamReader r = new StreamReader(filenaam);
-        string regel;
-        while (regel= r.ReadLine()) != null)
-            SchetsObject.Add(new SchetsObject(regel));
-        r.Close();
-        this.Invalidate();
-    }*/
 
     private void maakFileMenu()
     {   
@@ -192,7 +175,7 @@ public class SchetsWin : Form
     private void maakActieButtons(String[] kleuren)
     {   
         paneel = new Panel(); this.Controls.Add(paneel);
-        paneel.Size = new Size(600, 24);
+        paneel.Size = new Size(760, 24);
             
         Button clear = new Button(); paneel.Controls.Add(clear);
         clear.Text = "Clear";  
@@ -206,18 +189,24 @@ public class SchetsWin : Form
            
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
-        penkleur.Location = new Point(180, 3); 
+        penkleur.Location = new Point(160, 3); 
         penkleur.AutoSize = true;
 
-        /*Button undo = new Button(); paneel.Controls.Add(undo);
+        //knoppen voor undo en redo
+        Button undo = new Button(); paneel.Controls.Add(undo);
         undo.Text = "Undo";
-        undo.Name = "UndoButton";
-        undo.Enabled = false;
-        undo.Location = new Point(380, 0);
-        undo.Click += schetscontrol.Undo;*/
+        undo.Enabled = true;
+        undo.Location = new Point(340, 0);
+        undo.Click += schetscontrol.Undo;
+
+        Button redo = new Button(); paneel.Controls.Add(redo);
+        redo.Text = "Redo";
+        redo.Enabled = true;
+        redo.Location = new Point(420, 0);
+        redo.Click += schetscontrol.Redo;
 
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
-        cbb.Location = new Point(240, 0); 
+        cbb.Location = new Point(220, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
         cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
         foreach (string k in kleuren)
@@ -227,18 +216,16 @@ public class SchetsWin : Form
         //schuifregelaar voor de lijndikte
         TrackBar tb = new TrackBar(); paneel.Controls.Add(tb);
         Label tbtekst = new Label(); paneel.Controls.Add(tbtekst);
-        tbtekst.Location = new Point(400, 3);
+        tbtekst.Location = new Point(500, 3);
         tbtekst.AutoSize = true;
         tbtekst.Text = "Lijndikte:";
-        tb.Location = new Point(450, 0);
+        tb.Location = new Point(550, 0);
         tb.AutoSize = true;
         tb.Minimum = 0;
         tb.Maximum = 8;
         tb.Orientation = Orientation.Horizontal;
-        tb.Name = "tblijndikte";
-        tb.ValueChanged += schetscontrol.VeranderSchuif;
-        tb.MouseUp += schetscontrol.VeranderSchuif;
-
+        tb.ValueChanged += schetscontrol.VeranderLijndikte;
+        tb.Value = 3;
     }
 
 }

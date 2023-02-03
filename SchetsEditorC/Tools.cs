@@ -17,7 +17,6 @@ public abstract class StartpuntTool : ISchetsTool
 {
     protected Point startpunt;
     protected Brush kwast;
-    protected int lijndikte;
 
     public virtual void MuisVast(SchetsControl s, Point p)
     {   
@@ -55,7 +54,7 @@ public class TekstTool : StartpuntTool
             startpunt.X += (int)sz.Width;
             s.Invalidate();
         }
-        //Spaties kunnen toevoegen aan je tekst
+        //Als je een spatie typt slaat hij 20 pixels over en komt er dus een spatie
         if (c.ToString() == " ")
         {
             startpunt.X += 20;
@@ -64,7 +63,7 @@ public class TekstTool : StartpuntTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
     
 }
@@ -93,7 +92,7 @@ public abstract class TweepuntTool : StartpuntTool
     public override void MuisDrag(SchetsControl s, Point p)
     {   
         s.Refresh();
-        this.Bezig(s.CreateGraphics(), this.startpunt, p);
+        this.Bezig(s.CreateGraphics(), this.startpunt, p, s);
     }
     public override void MuisLos(SchetsControl s, Point p)
     {   
@@ -102,10 +101,10 @@ public abstract class TweepuntTool : StartpuntTool
         s.Invalidate();
     }
     public override void Letter(SchetsControl s, char c) {}
-    public abstract void Bezig(Graphics g, Point p1, Point p2);
+    public abstract void Bezig(Graphics g, Point p1, Point p2, SchetsControl s);
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        this.Bezig(g, p1, p2);
+        this.Bezig(g, p1, p2, s);
     }
 }
 
@@ -113,14 +112,14 @@ public class RechthoekTool : TweepuntTool
 {
     public override string ToString() { return "kader"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
+    public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {   
-        g.DrawRectangle(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+        g.DrawRectangle(MaakPen(kwast, s.LijnDikte), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -128,14 +127,14 @@ public class RingTool : TweepuntTool
 {
     public override string ToString() { return "ring"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
+    public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        g.DrawEllipse(MaakPen(kwast, 3), RechthoekTool.Punten2Rechthoek(p1, p2));
+        g.DrawEllipse(MaakPen(kwast, s.LijnDikte), RechthoekTool.Punten2Rechthoek(p1, p2));
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -144,14 +143,14 @@ public class CirkelTool : RingTool
 {
     public override string ToString() { return "cirkel"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
+    public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {
         g.FillEllipse(kwast, RechthoekTool.Punten2Rechthoek(p1, p2));
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -162,7 +161,7 @@ public class VolRechthoekTool : RechthoekTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -171,14 +170,14 @@ public class LijnTool : TweepuntTool
 {
     public override string ToString() { return "lijn"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2)
+    public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {   
-        g.DrawLine(MaakPen(this.kwast,3), p1, p2);
+        g.DrawLine(MaakPen(this.kwast, s.LijnDikte), p1, p2);
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -195,7 +194,7 @@ public class PenTool : LijnTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2));
+        s.Schets.toevoegen(new SchetsObject(s.PenKleur, ToString(), p1, p2, s.LijnDikte));
     }
 
 }
@@ -212,7 +211,8 @@ public class GumTool : ISchetsTool
     public void MuisLos(SchetsControl s, Point p)
     {
         foreach (SchetsObject schetsobj in s.Schets.ObjectenLijst)
-        {
+        {   //"raak" controleert of je muis binnen de grenzen van een object zit
+            //Als dat het geval is wordt het uit de lijst gehaald en de schets wordt bijgewerkt
             if (schetsobj.raak(p))
             {
                 s.Schets.ObjectenLijst.Remove(schetsobj);
@@ -231,19 +231,23 @@ public class GumTool : ISchetsTool
 
 public class SchetsObject
 {
+    //declareren van de variabelen die in deze class worden gebruikt
     public Point beginpunt { get; set;}
     public Point eindpunt { get; set;}
     public string tekst { get; set;}
     public Color kleur { get; set;}
     public string tool { get; set;}
+    public int lijndikte { get; set;}
 
-    public SchetsObject(Color kleur, string t, Point p, Point q, string text = null)
+public SchetsObject(Color kleur, string t, Point p, Point q, int dikte, string text = null)
     {
+        //variabelen een beginwaarde geven in de constructormethode
         this.kleur = kleur;
         this.tool = t;
         this.tekst = text;
         this.beginpunt = p;
         this.eindpunt = q;
+        this.lijndikte = dikte;
     }
 
     public void TekenObject(Graphics g)
@@ -255,9 +259,9 @@ public class SchetsObject
             pen.EndCap = LineCap.Round;
             return pen;
         }
+         SolidBrush kwast = new SolidBrush(kleur);
 
-        SolidBrush kwast = new SolidBrush(kleur);
-
+        //Voor elk type object moet er iets anders getekend worden, vandaar een switch. De opdrachten komen uit de Tools die er al stonden.
         switch (tool)
         {
             case "tekst":
@@ -268,7 +272,7 @@ public class SchetsObject
                 break;
 
             case "kader":
-                g.DrawRectangle(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(beginpunt, eindpunt));
+                g.DrawRectangle(MaakPen(kwast, lijndikte), TweepuntTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "vlak":
@@ -276,7 +280,7 @@ public class SchetsObject
                 break;
 
             case "ring":
-                g.DrawEllipse(MaakPen(kwast, 3), RechthoekTool.Punten2Rechthoek(beginpunt, eindpunt));
+                g.DrawEllipse(MaakPen(kwast, lijndikte), RechthoekTool.Punten2Rechthoek(beginpunt, eindpunt));
                 break;
 
             case "cirkel":
@@ -284,40 +288,44 @@ public class SchetsObject
                 break;
 
             case "lijn":
-                g.DrawLine(MaakPen(kwast, 3), beginpunt, eindpunt);
+                g.DrawLine(MaakPen(kwast, lijndikte), beginpunt, eindpunt);
                 break;
 
             case "pen":
-                g.DrawLine(MaakPen(kwast, 3), beginpunt, eindpunt);
+                g.DrawLine(MaakPen(kwast, lijndikte), beginpunt, eindpunt);
                 break;
 
         }
 
     }
 
+    //Als er raak wordt geklikt, dan pas mag het object worden weggehaald
     public bool raak(Point p)
     {
+        //declareren van variabelen die nodig zijn in het vinden van de objecten
+        int marge = lijndikte + 4;
         int bovengrens = Math.Min(beginpunt.Y, eindpunt.Y);
         int ondergrens = Math.Max(beginpunt.Y, eindpunt.Y);
         int lgrens = Math.Min(beginpunt.X, eindpunt.X);
         int rgrens = Math.Max(beginpunt.X, eindpunt.X);
 
+        int breedte = Math.Abs(eindpunt.X - beginpunt.X);
+        int hoogte = Math.Abs(eindpunt.Y - beginpunt.Y);
+        double radx = (double)(breedte / 2);
+        double rady = (double)(hoogte / 2);
+        Point midden = new Point(lgrens + (breedte / 2), bovengrens + (hoogte / 2));
+        Point nieuwpunt = new Point(p.X - midden.X, p.Y - midden.Y);
+
+        //voor elke tool zijn er andere regels voor het vinden van het object, dus weer een switch-opdracht
         switch (this.tool)
         {
-            //We hebben 4 als marge gekozen 
-
-            case "tekst":
-                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
-                    return true; 
-                break;
-
             case "kader":
-                if (
-                    (p.X >= lgrens -4 && p.X <= lgrens +4 && p.Y >= bovengrens -4 && p.Y <= ondergrens + 4) ||
-                    (p.X >= rgrens -4 && p.X <= rgrens +4 && p.Y >= bovengrens -4 && p.Y <= ondergrens + 4) ||
-                    (p.X >= lgrens -4 && p.X <= rgrens +4 && p.Y >= bovengrens -4 && p.Y <= bovengrens + 4) ||
-                    (p.X >= lgrens -4 && p.X <= rgrens +4 && p.Y >= ondergrens -4 && p.Y <= ondergrens + 4)
-                )
+                if  (
+                    (p.X >= lgrens -marge && p.X <= lgrens +marge && p.Y >= bovengrens -marge && p.Y <= ondergrens + marge) ||
+                    (p.X >= rgrens -marge && p.X <= rgrens +marge && p.Y >= bovengrens -marge && p.Y <= ondergrens + marge) ||
+                    (p.X >= lgrens -marge && p.X <= rgrens +marge && p.Y >= bovengrens -marge && p.Y <= bovengrens + marge) ||
+                    (p.X >= lgrens -marge && p.X <= rgrens +marge && p.Y >= ondergrens -marge && p.Y <= ondergrens + marge)
+                    )   
                     return true;
                 break;
 
@@ -327,18 +335,17 @@ public class SchetsObject
                 break;
 
             case "ring":
-                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
-                    return true;
-                break;
-
+                //we kwamen er bij deze niet helemaal uit hihi
             case "cirkel":
-                if ((p.X >= beginpunt.X) && (p.X <= eindpunt.X) && (p.Y >= beginpunt.Y) && (p.Y <= eindpunt.Y))
-                    return true;
-                break;
+                if (radx <= 0.0 || rady <= 0.0)
+                    return false;
+                return ((double)(nieuwpunt.X * nieuwpunt.X)
+                         / (radx * radx)) + ((double)(nieuwpunt.Y * nieuwpunt.Y) / (rady * rady))
+                    <= 1.0;
 
+            //lijn en pen hebben in Tools dezelfde opdracht, dus hier hebben ze dezelfde voorwaarde voor 'raak zijn'
             case "lijn":
             case "pen":
-                int margeafstand = 3 + 4;
                 float px = eindpunt.X - beginpunt.X;
                 float py = eindpunt.Y - beginpunt.Y;
                 float u = ((p.X - beginpunt.X) * px + (p.Y - beginpunt.Y) * py) / ((px * px) + (py * py));
@@ -354,7 +361,7 @@ public class SchetsObject
                 float dy = y - p.Y;
 
                 double afstand = Math.Sqrt(dx * dx + dy * dy);
-                return afstand <= margeafstand;
+                return afstand <= marge;
 
         }
 

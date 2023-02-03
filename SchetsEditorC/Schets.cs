@@ -8,6 +8,7 @@ public class Schets
 {
     public Bitmap bitmap;
     public List<SchetsObject> ObjectenLijst = new List<SchetsObject>();
+    public List<SchetsObject> RedoLijst = new List<SchetsObject>();
     public bool gewijzigd { get; set; }
 
     public Schets()
@@ -42,6 +43,32 @@ public class Schets
     public void toevoegen(SchetsObject schetsobj)
     {
         ObjectenLijst.Add(schetsobj);
+    }
+
+    public void Undo()
+    {
+        if(ObjectenLijst.Count == 0)
+        {
+            MessageBox.Show("Nothing to undo!");
+        }
+        else
+        {
+            RedoLijst.Add(ObjectenLijst[ObjectenLijst.Count - 1]);
+            ObjectenLijst.Remove(ObjectenLijst[ObjectenLijst.Count - 1]);
+        }
+    }
+
+    public void Redo()
+    {
+        if (RedoLijst.Count == 0)
+        {
+            MessageBox.Show("Nothing to redo!");
+        }
+        else
+        {
+            ObjectenLijst.Add(RedoLijst[RedoLijst.Count - 1]);
+            RedoLijst.Remove(RedoLijst[RedoLijst.Count - 1]);
+        }
     }
 
     public void Schoon()

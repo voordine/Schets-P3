@@ -7,13 +7,21 @@ public class SchetsControl : UserControl
 {   
     public Schets schets;
     private Color penkleur;
-    public int lijndikte;
+    public int lijndikte = 3;
 
     public Color PenKleur
     { get { return penkleur; }
     }
     public Schets Schets
     { get { return schets;   }
+    }
+
+    public int LijnDikte
+    { get { return lijndikte;}
+        set
+        {
+            lijndikte = value;
+        }
     }
 
     public SchetsControl()
@@ -47,6 +55,11 @@ public class SchetsControl : UserControl
     {   schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
         this.Invalidate();
+        //Het lukte ons niet om de roteer functie te laten werken met alle aanpassingen die we hebben gedaan, dus dan maar zo :)
+        MessageBox.Show("Het lijkt erop dat je een premium functie van \"Schets\" hebt ontdekt! \n" +
+                        "Je gebruikt momenteel de gratis versie."
+                        , "Oeps!"
+                        );
     }
     public void VeranderKleur(object obj, EventArgs ea)
     {   string kleurNaam = ((ComboBox)obj).Text;
@@ -57,22 +70,24 @@ public class SchetsControl : UserControl
         penkleur = Color.FromName(kleurNaam);
     }
 
-    public void VeranderLijndikte()
+    public void VeranderLijndikte(object o, EventArgs ea)
     {
-        //int lijndikte = tblijndikte.Value;
-    }
-
-    public void VeranderSchuif(object o, EventArgs ea)
-    {
-        VeranderLijndikte();
+        TrackBar tb = (TrackBar)o;
+        LijnDikte = tb.Value;
         this.Invalidate();
     }
 
-    public void Undo(object sender, EventArgs ea)
+    public void Redo(object o, EventArgs ea)
     {
-        if(Schets.ObjectenLijst.Count != 0)
-        {
+        schets.Redo();
+        schets.BitmapGraphics.FillRectangle(Brushes.White, new Rectangle(0, 0, Width, Height));
+        this.Invalidate();
+    }
 
-        }
+    public void Undo(object o, EventArgs ea)
+    {
+        schets.Undo();
+        schets.BitmapGraphics.FillRectangle(Brushes.White, new Rectangle(0, 0, Width, Height));
+        this.Invalidate();
     }
 }
